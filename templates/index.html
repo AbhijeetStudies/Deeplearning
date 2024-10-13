@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+    <title>Image Classifier</title>
+    <style>
+        body {
+            background-color: #f8f9fa;
+        }
+        .container {
+            margin-top: 50px;
+            border: 1px solid #dee2e6;
+            border-radius: 5px;
+            padding: 20px;
+            background-color: white;
+        }
+        h2 {
+            margin-bottom: 20px;
+        }
+        .bordered {
+            border: 2px dashed #007bff;
+            padding: 10px;
+            margin-top: 20px;
+        }
+    </style>
+</head>
+<body>
+
+<div class="container">
+    <h2>Image Classifier</h2>
+    <p>Upload an image to classify it into one of the categories: drink, food, inside, menu, outside.</p>
+    <form method="post" enctype="multipart/form-data">
+        <div class="form-group">
+            <input type="file" class="form-control-file" name="file" required>
+        </div>
+        <button type="submit" class="btn btn-primary">Upload</button>
+    </form>
+</div>
+
+</body>
+</html>

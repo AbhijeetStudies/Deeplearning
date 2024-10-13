@@ -1,4 +1,3 @@
-#Flask 
 from flask import Flask, request, render_template, send_from_directory
 import numpy as np
 from tensorflow.keras.preprocessing.image import load_img, img_to_array
@@ -20,20 +19,21 @@ def predict_class(img_path):
         predictions = model.predict(img_array)
         predicted_class_index = np.argmax(predictions, axis=1)[0]
         predicted_class = class_labels[predicted_class_index]
-        predicted_probability = predictions[0][predicted_class_index]
+        predicted_probability = f"{predictions[0][predicted_class_index]:.2f}"
         
         return predicted_class, predicted_probability
     except Exception as e:
-        return f"Error during prediction: {str(e)}", 0
+        return f"Error during prediction: {str(e)}", "0.00"
 
+@app.route("/", methods=["GET", "POST"])
 @app.route("/", methods=["GET", "POST"])
 def upload_file():
     if request.method == "POST":
         if "file" not in request.files:
-            return "No file part"
+            return render_template("index.html", error="No file part")
         file = request.files["file"]
         if file.filename == "":
-            return "No selected file"
+            return render_template("index.html", error="No selected file")
 
         # Create uploads directory if it doesn't exist
         uploads_dir = 'uploads'
@@ -44,25 +44,19 @@ def upload_file():
         try:
             file.save(img_path)
         except Exception as e:
-            return f"Error saving file: {str(e)}"
+            return render_template("index.html", error=f"Error saving file: {str(e)}")
 
         # Predict class
         predicted_class, predicted_probability = predict_class(img_path)
 
+        # Ensure predicted_probability is a float
+        predicted_probability = float(predicted_probability)
+
         # Return the result with the uploaded image
-        return f'''
-            <h1>Predicted class: {predicted_class}, Probability: {predicted_probability:.2f}</h1>
-            <img src="/uploads/{file.filename}" alt="Uploaded Image" style="max-width: 400px;">
-            <br>
-            <a href="/">Upload another image</a>
-        '''
+        return render_template("result.html", predicted_class=predicted_class, predicted_probability=predicted_probability, filename=file.filename)
     
-    return '''
-    <form method="post" enctype="multipart/form-data">
-        <input type="file" name="file">
-        <input type="submit" value="Upload">
-    </form>
-    '''
+    return render_template("index.html")
+
 
 @app.route('/uploads/<filename>')
 def uploaded_file(filename):
