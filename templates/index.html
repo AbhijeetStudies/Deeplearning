@@ -4,17 +4,37 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
     <title>Image Classifier</title>
     <style>
         body {
             background-color: #f8f9fa;
         }
+        .header {
+            background-color: #007bff;
+            color: white;
+            padding: 15px 0;
+            text-align: center;
+        }
+        .tab-bar {
+            background-color: #0056b3;
+            padding: 10px 0;
+        }
+        .tab {
+            color: white;
+            padding: 10px 20px;
+            text-decoration: none;
+        }
+        .tab:hover {
+            background-color: #003f7f;
+        }
         .container {
-            margin-top: 50px;
+            margin-top: 20px;
             border: 1px solid #dee2e6;
             border-radius: 5px;
             padding: 20px;
             background-color: white;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
         }
         h2 {
             margin-bottom: 20px;
@@ -24,12 +44,89 @@
             padding: 10px;
             margin-top: 20px;
         }
+        .footer {
+            background-color: #0056b3;
+            color: white;
+            text-align: center;
+            padding: 10px 0;
+            position: relative;
+            bottom: 0;
+            width: 100%;
+            margin-top: 20px;
+        }
+        .robot-icon {
+            font-size: 50px;
+            color: #007bff;
+            margin: 10px;
+        }
+        .form-control-file {
+            width: 80%;
+            height: 200px; /* Increased height */
+        }
+        .loading-bar {
+            width: 100%;
+            height: 10px;
+            background-color: #e0e0e0;
+            position: relative;
+            overflow: hidden;
+            margin-top: 20px;
+        }
+        .progress {
+            height: 100%;
+            background-color: #007bff;
+            position: absolute;
+            animation: load 2s linear infinite; /* Continuous animation */
+        }
+        @keyframes load {
+            0% {
+                left: -100%;
+            }
+            50% {
+                left: 100%;
+            }
+            100% {
+                left: -100%;
+            }
+        }
+        .light {
+            width: 20px; /* Width of the light */
+            height: 10px; /* Height of the light */
+            background-color: rgba(0, 123, 255, 0.8); /* Blue light color */
+            position: absolute;
+            border-radius: 5px;
+            animation: lightMove 2s linear infinite; /* Light movement */
+        }
+        @keyframes lightMove {
+            0% {
+                left: -20px; /* Start position */
+            }
+            50% {
+                left: 100%; /* Move to the end */
+            }
+            100% {
+                left: -20px; /* Reset position */
+            }
+        }
+        .loading-message {
+            margin-top: 10px;
+            font-weight: bold;
+        }
     </style>
 </head>
 <body>
 
+<div class="header">
+    <h1>Image Classifier</h1>
+</div>
+
+<div class="tab-bar text-center">
+    <a href="#" class="tab">Home</a>
+    <a href="#" class="tab">About</a>
+    <a href="#" class="tab">Contact</a>
+</div>
+
 <div class="container">
-    <h2>Image Classifier</h2>
+    <h2>Upload an Image</h2>
     <p>Upload an image to classify it into one of the categories: drink, food, inside, menu, outside.</p>
     <form method="post" enctype="multipart/form-data">
         <div class="form-group">
@@ -37,7 +134,39 @@
         </div>
         <button type="submit" class="btn btn-primary">Upload</button>
     </form>
+    
+    <div class="text-center">
+        <i class="fas fa-robot robot-icon"></i>
+        <i class="fas fa-robot robot-icon"></i>
+        <i class="fas fa-robot robot-icon"></i>
+    </div>
+    
+    <!-- Loading bar -->
+    <div class="loading-bar">
+        <div class="progress"></div>
+        <div class="light"></div> <!-- Light element -->
+    </div>
+    <div class="loading-message" id="loadingMessage">Initializing download... </div>
 </div>
+
+<div class="footer">
+    <p>&copy; 2024 Image Classifier. All Rights Reserved.</p>
+</div>
+
+<script>
+    // Function to update loading message with a random number
+    const loadingMessage = document.getElementById('loadingMessage');
+    let randomNumber = Math.floor(Math.random() * 1000000) + 1000000; // Starting random number in millions
+
+    const updateMessage = () => {
+        randomNumber += Math.floor(Math.random() * 10000); // Increase rapidly
+        loadingMessage.innerText = `More images are being downloaded and the model is learning... ${randomNumber.toLocaleString()} images processed`;
+        setTimeout(updateMessage, 100); // Update every 100 milliseconds
+    };
+
+    // Start the loading message updates
+    updateMessage();
+</script>
 
 </body>
 </html>
